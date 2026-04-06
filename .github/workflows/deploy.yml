@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Pages
+name: CI — Security & Build Check
 
 on:
   push:
@@ -7,11 +7,28 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  security:
+    name: Secret scanning
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog — verify no secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+
+      - name: Gitleaks — detect hardcoded secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Build check
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,11 +44,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=pablo-nistal-portfolio
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
