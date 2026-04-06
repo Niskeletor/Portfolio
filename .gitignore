@@ -1,0 +1,29 @@
+# Build output
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Reference/private files — NOT for the public repo
+portfolio-assets/
+"CV Pablo Alejandro Nistal del Rio.docx"
+CV*.docx
+deep-research-report.md
+OKComputer_*.zip
+
+# Cloudflare / Wrangler
+.wrangler/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Env files
+.env
+.env.*
+!.env.example

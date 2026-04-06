@@ -1,0 +1,76 @@
+---
+import { useTranslations, type Lang } from '../../i18n/utils';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const metrics = [
+  { value: '6+', key: 'hero.metrics.years' },
+  { value: '50+', key: 'hero.metrics.services' },
+  { value: '3', key: 'hero.metrics.nodes' },
+  { value: '🌍', key: 'hero.metrics.remote' },
+] as const;
+---
+<section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+  <div class="absolute inset-0" style="background: linear-gradient(to bottom right, var(--color-background), var(--color-background), rgba(99,102,241,0.1))" />
+  <div class="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[128px] animate-pulse" style="background: rgba(99,102,241,0.2)" />
+  <div class="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[128px] animate-pulse" style="background: rgba(139,92,246,0.2); animation-delay: 1s" />
+
+  <div class="relative z-10 max-w-5xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row items-center gap-12">
+      <div class="flex-shrink-0">
+        <div class="relative w-48 h-48 md:w-56 md:h-56">
+          <div class="absolute inset-0 rounded-full p-[3px]" style="background: linear-gradient(135deg, #6366f1, #8b5cf6)">
+            <div class="w-full h-full rounded-full overflow-hidden" style="background-color: var(--color-background)">
+              <img src="/profile.jpg" alt="Pablo Alejandro Nistal" class="w-full h-full object-cover" loading="eager" />
+            </div>
+          </div>
+          <div class="absolute -top-2 -right-2 w-16 h-16 rounded-full blur-xl" style="background: rgba(99,102,241,0.3)" />
+        </div>
+      </div>
+
+      <div class="text-center md:text-left">
+        <p class="text-lg mb-2" style="color: var(--color-muted-foreground)">{t('hero.greeting')}</p>
+        <h1 class="text-4xl md:text-6xl font-bold mb-3 gradient-text">
+          Pablo Alejandro Nistal
+        </h1>
+        <h2 class="text-xl md:text-2xl font-semibold text-white mb-4">
+          {t('hero.role')}
+        </h2>
+        <p class="text-sm md:text-base mb-6 max-w-xl font-mono" style="color: var(--color-muted-foreground)">
+          {t('hero.tagline')}
+        </p>
+
+        <div class="flex flex-wrap justify-center md:justify-start gap-6 mb-8">
+          {metrics.map(m => (
+            <div class="text-center">
+              <div class="text-2xl font-bold gradient-text">{m.value}</div>
+              <div class="text-xs" style="color: var(--color-muted-foreground)">{t(m.key as any)}</div>
+            </div>
+          ))}
+        </div>
+
+        <div class="flex flex-wrap justify-center md:justify-start gap-3">
+          <a href="#projects" class="text-white rounded-full px-6 py-3 text-sm font-medium transition-all hover:scale-105 glow-hover" style="background: linear-gradient(135deg, #6366f1, #8b5cf6)">
+            {t('hero.cta.projects')}
+          </a>
+          <a href="#contact" class="text-white rounded-full px-6 py-3 text-sm font-medium transition-all hover:scale-105" style="border: 1px solid var(--color-border)">
+            {t('hero.cta.contact')}
+          </a>
+          <a href="https://github.com/niskeletor" target="_blank" rel="noopener" class="rounded-full px-4 py-3 text-sm transition-all hover:text-white" style="border: 1px solid var(--color-border); color: var(--color-muted-foreground)">
+            GitHub
+          </a>
+          <a href="https://linkedin.com/in/pnistalrio" target="_blank" rel="noopener" class="rounded-full px-4 py-3 text-sm transition-all hover:text-white" style="border: 1px solid var(--color-border); color: var(--color-muted-foreground)">
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" style="color: var(--color-muted-foreground)">
+    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</section>

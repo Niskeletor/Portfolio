@@ -1,0 +1,133 @@
+---
+import { useTranslations, type Lang } from '../../i18n/utils';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const experiences = [
+  {
+    title: 'DevOps Architect | Sysadmin',
+    company: 'Allenta Consulting',
+    location: 'A Coruña, Spain (Hybrid)',
+    period: lang === 'es' ? 'Ene 2026 — Presente' : 'Jan 2026 — Present',
+    bullets: lang === 'es'
+      ? [
+          'Operación y monitorización de infraestructura Linux crítica con VictoriaMetrics y Zabbix',
+          'Automatización con Ansible — configuración, despliegues y mantenimiento',
+          'Gestión de servicios en Docker con CI/CD en GitLab',
+          'Seguridad perimetral con Cloudflare y administración RHEL',
+        ]
+      : [
+          'Operating and monitoring critical Linux infrastructure with VictoriaMetrics and Zabbix',
+          'Automation with Ansible — configuration management, deployments and maintenance',
+          'Docker service management with GitLab CI/CD pipelines',
+          'Perimeter security with Cloudflare, RHEL system administration',
+        ],
+    tech: ['RHEL', 'Ansible', 'Docker', 'GitLab CI/CD', 'VictoriaMetrics', 'Zabbix', 'Cloudflare', 'AWS'],
+  },
+  {
+    title: 'DevOps SRE',
+    company: 'Ozona Tech',
+    location: 'Santiago de Compostela, Spain',
+    period: 'Nov 2024 — Jan 2026',
+    bullets: lang === 'es'
+      ? [
+          'Ingeniería de fiabilidad y operaciones de plataforma',
+          'Mejora de pipelines CI/CD y observabilidad',
+        ]
+      : [
+          'Site reliability engineering and platform operations',
+          'CI/CD pipeline improvement and observability',
+        ],
+    tech: ['Linux', 'Docker', 'Kubernetes', 'CI/CD'],
+  },
+  {
+    title: 'DevOps Engineer',
+    company: 'Altia',
+    location: 'A Coruña, Spain',
+    period: 'Apr 2024 — Nov 2024',
+    bullets: lang === 'es'
+      ? [
+          'Ingeniería DevOps en proyectos cliente',
+          'Automatización e integración de infraestructura',
+        ]
+      : [
+          'DevOps engineering on client projects',
+          'Infrastructure automation and integration',
+        ],
+    tech: ['Linux', 'Docker', 'CI/CD', 'Ansible'],
+  },
+  {
+    title: 'Sysadmin | Software Developer',
+    company: 'TABIGAL SL',
+    location: 'A Coruña, Spain',
+    period: 'Nov 2021 — Apr 2024',
+    bullets: lang === 'es'
+      ? [
+          'Administración de sistemas Linux y desarrollo de herramientas internas',
+          'Automatización de procesos y mantenimiento de infraestructura',
+        ]
+      : [
+          'Linux systems administration and internal tooling development',
+          'Process automation and infrastructure maintenance',
+        ],
+    tech: ['Linux', 'Python', 'Bash', 'Networking'],
+  },
+  {
+    title: 'Systems Administrator',
+    company: 'INCOGA NORTE',
+    location: 'A Coruña, Spain',
+    period: 'Feb 2020 — Nov 2021',
+    bullets: lang === 'es'
+      ? [
+          'Administración de sistemas informáticos corporativos',
+          'Soporte técnico y mantenimiento de infraestructura',
+        ]
+      : [
+          'Corporate IT systems administration',
+          'Technical support and infrastructure maintenance',
+        ],
+    tech: ['Windows Server', 'Linux', 'Networking'],
+  },
+];
+---
+<section id="experience" class="py-24 px-6">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold mb-16">
+      {t('experience.title')} <span class="gradient-text">{t('experience.subtitle')}</span>
+    </h2>
+    <div class="relative">
+      <div class="absolute left-4 top-0 bottom-0 w-px" style="background-color: var(--color-border)" />
+      {experiences.map(exp => (
+        <div class="relative mb-10 pl-16">
+          <div class="absolute left-0 w-9 h-9 rounded-full flex items-center justify-center" style="background-color: var(--color-background); border: 2px solid var(--color-primary)">
+            <svg width="16" height="16" fill="none" stroke="#6366f1" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+          </div>
+          <div class="card p-6 transition-colors">
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <span class="text-sm font-medium" style="color: var(--color-primary)">{exp.period}</span>
+              <span class="text-xs" style="color: var(--color-muted-foreground)">· {exp.location}</span>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-1">{exp.title}</h3>
+            <p class="mb-3" style="color: var(--color-muted-foreground)">{exp.company}</p>
+            <ul class="space-y-1 mb-4">
+              {exp.bullets.map(b => (
+                <li class="text-sm flex gap-2" style="color: var(--color-muted-foreground)">
+                  <span style="color: var(--color-primary); margin-top: 0.125rem">›</span>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="flex flex-wrap gap-2">
+              {exp.tech.map(tag => (
+                <span class="text-xs px-2 py-1 rounded-full" style="background-color: rgba(99,102,241,0.1); color: var(--color-primary)">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

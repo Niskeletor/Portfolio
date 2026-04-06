@@ -1,0 +1,32 @@
+---
+import { useTranslations, type Lang } from '../../i18n/utils';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const bioEN = [
+  "I'm a DevOps Architect and SRE based in A Coruña, Spain, with 6+ years operating, automating and improving Linux infrastructure. I currently work at Allenta Consulting on high-availability systems, observability pipelines and automation with Ansible.",
+  "I apply SRE principles — SLOs, error budgets, blameless postmortems, toil reduction — both at work and in my personal platform (a production-like 3-node cluster I run at home). I believe the best way to grow is to operate real systems under real constraints.",
+  "I'm open to remote EMEA roles where reliability engineering and platform thinking matter."
+];
+
+const bioES = [
+  "Soy Arquitecto DevOps y SRE basado en A Coruña, con 6+ años operando, automatizando y mejorando infraestructura Linux. Actualmente trabajo en Allenta Consulting en sistemas de alta disponibilidad, pipelines de observabilidad y automatización con Ansible.",
+  "Aplico principios SRE — SLOs, error budgets, postmortems blameless, reducción de toil — tanto en el trabajo como en mi plataforma personal (un cluster de 3 nodos que opero en casa como entorno production-like). Creo que la mejor manera de crecer es operar sistemas reales con restricciones reales.",
+  "Estoy abierto a roles remotos EMEA donde la ingeniería de fiabilidad y el pensamiento de plataforma sean importantes."
+];
+
+const bio = lang === 'es' ? bioES : bioEN;
+---
+<section id="about" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold mb-12">
+      {t('about.title')} <span class="gradient-text">{t('about.subtitle')}</span>
+    </h2>
+    <div class="max-w-3xl">
+      {bio.map(para => (
+        <p class="text-lg leading-relaxed mb-6" style="color: var(--color-muted-foreground)">{para}</p>
+      ))}
+    </div>
+  </div>
+</section>

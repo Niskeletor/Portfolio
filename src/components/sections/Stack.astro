@@ -1,0 +1,100 @@
+---
+import { useTranslations, type Lang } from '../../i18n/utils';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const categories = [
+  {
+    title: 'Infrastructure',
+    titleES: 'Infraestructura',
+    icon: '🖥️',
+    skills: [
+      { name: 'Proxmox VE', context: lang === 'es' ? 'Plataforma homelab, 3 nodos, 208GB RAM' : 'Homelab platform, 3 nodes, 208GB RAM' },
+      { name: 'K3s / Kubernetes', context: lang === 'es' ? 'Cluster en producción, GitOps con ArgoCD' : 'Production cluster, GitOps with ArgoCD' },
+      { name: 'Docker', context: lang === 'es' ? 'Trabajo diario + homelab (50+ servicios)' : 'Daily work + homelab (50+ services)' },
+      { name: 'Linux / RHEL', context: lang === 'es' ? 'SO principal — trabajo y personal' : 'Primary OS — work and personal' },
+    ],
+  },
+  {
+    title: 'Observability',
+    titleES: 'Observabilidad',
+    icon: '📊',
+    skills: [
+      { name: 'VictoriaMetrics', context: lang === 'es' ? 'Métricas homelab + trabajo (Allenta)' : 'Homelab metrics + work (Allenta)' },
+      { name: 'Zabbix', context: lang === 'es' ? 'Monitorización trabajo (Allenta)' : 'Work monitoring (Allenta)' },
+      { name: 'Grafana', context: lang === 'es' ? 'Dashboards + alertas' : 'Dashboards + alerting' },
+    ],
+  },
+  {
+    title: 'Automation & IaC',
+    titleES: 'Automatización e IaC',
+    icon: '⚙️',
+    skills: [
+      { name: 'Ansible', context: lang === 'es' ? 'IaC principal — trabajo + homelab' : 'Primary IaC — work + homelab' },
+      { name: 'Bash / Python', context: lang === 'es' ? 'Scripts, automatización, APIs' : 'Scripting, automation, APIs' },
+      { name: 'GitOps / ArgoCD', context: lang === 'es' ? 'Gestión declarativa del cluster K3s' : 'Declarative K3s cluster management' },
+    ],
+  },
+  {
+    title: 'CI/CD',
+    titleES: 'CI/CD',
+    icon: '🔄',
+    skills: [
+      { name: 'GitLab CI/CD', context: lang === 'es' ? 'CI/CD principal en trabajo' : 'Primary CI/CD at work' },
+      { name: 'GitHub Actions', context: lang === 'es' ? 'Proyectos personales + este portfolio' : 'Personal projects + this portfolio' },
+    ],
+  },
+  {
+    title: 'Cloud & Network',
+    titleES: 'Cloud y Red',
+    icon: '☁️',
+    skills: [
+      { name: 'AWS', context: lang === 'es' ? 'EC2, S3, IAM — trabajo (Allenta)' : 'EC2, S3, IAM — work (Allenta)' },
+      { name: 'Cloudflare', context: lang === 'es' ? 'DNS, Tunnel, Pages, Workers' : 'DNS, Tunnel, Pages, Workers' },
+      { name: 'Azure', context: lang === 'es' ? 'AZ-900 certificado, conceptos fundamentales' : 'AZ-900 certified, fundamentals' },
+    ],
+  },
+  {
+    title: 'Security',
+    titleES: 'Seguridad',
+    icon: '🔒',
+    skills: [
+      { name: 'Vaultwarden', context: lang === 'es' ? 'Gestión de secretos — homelab' : 'Secrets management — homelab' },
+      { name: 'Network segmentation', context: lang === 'es' ? 'VLANs, Pi-hole, WireGuard' : 'VLANs, Pi-hole, WireGuard' },
+    ],
+  },
+];
+---
+<section id="stack" class="py-24 px-6" style="background-color: rgba(26,26,26,0.3)">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">
+      {t('stack.title')} <span class="gradient-text">{t('stack.subtitle')}</span>
+    </h2>
+    <p class="mb-12 max-w-2xl" style="color: var(--color-muted-foreground)">
+      {lang === 'es'
+        ? 'Herramientas que uso en contexto real — no porcentajes arbitrarios.'
+        : 'Tools I use in real context — no arbitrary percentage bars.'}
+    </p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {categories.map(cat => (
+        <div class="card p-6 transition-colors" style="border-color: var(--color-border)">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-2xl">{cat.icon}</span>
+            <h3 class="text-lg font-semibold text-white">
+              {lang === 'es' ? cat.titleES : cat.title}
+            </h3>
+          </div>
+          <div class="space-y-3">
+            {cat.skills.map(skill => (
+              <div>
+                <p class="text-sm font-medium text-white">{skill.name}</p>
+                <p class="text-xs" style="color: var(--color-muted-foreground)">{skill.context}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import { getLangFromUrl } from '../i18n/utils';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: 'en' | 'es';
+}
+
+const {
+  title = 'Pablo Alejandro Nistal — DevOps / SRE / Platform Engineer',
+  description = 'DevOps Architect and SRE based in A Coruña, Spain. Kubernetes, Ansible, GitOps, Observability, Linux.',
+  lang = getLangFromUrl(Astro.url),
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-background text-white">
+    <Navigation lang={lang} />
+    <main>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

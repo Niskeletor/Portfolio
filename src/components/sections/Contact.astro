@@ -1,0 +1,35 @@
+---
+import { useTranslations, type Lang } from '../../i18n/utils';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const isEN = lang === 'en';
+---
+<section id="contact" class="py-24 px-6 bg-card/30">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">
+      {t('contact.title')} <span class="gradient-text">{t('contact.subtitle')}</span>
+    </h2>
+    <p class="text-muted-foreground mb-2">{t('contact.availability')}</p>
+    <p class="text-muted-foreground text-sm mb-10">{t('contact.timezone')}</p>
+
+    <div class="flex flex-wrap justify-center gap-4 mb-10">
+      <a href="mailto:nistalin@gmail.com"
+        class="gradient-bg text-white rounded-full px-8 py-4 text-base font-medium glow-hover transition-all hover:scale-105">
+        {isEN ? '✉️ Send email' : '✉️ Enviar email'}
+      </a>
+      <a href="https://linkedin.com/in/pnistalrio" target="_blank" rel="noopener"
+        class="border border-border text-white rounded-full px-8 py-4 text-base font-medium hover:border-primary transition-all hover:scale-105">
+        LinkedIn
+      </a>
+      <a href="https://github.com/niskeletor" target="_blank" rel="noopener"
+        class="border border-border text-white rounded-full px-8 py-4 text-base font-medium hover:border-primary transition-all hover:scale-105">
+        GitHub
+      </a>
+    </div>
+
+    <p class="text-sm text-muted-foreground">
+      {isEN ? 'Based in A Coruña, Galicia, Spain 🇪🇸' : 'Basado en A Coruña, Galicia, España 🇪🇸'}
+    </p>
+  </div>
+</section>

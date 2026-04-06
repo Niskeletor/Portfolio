@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog') || []).filter(e => !e.data.draft);
+  return posts.map(post => ({
+    params: { slug: post.id.replace(/^(en|es)\//, '') },
+    props: post,
+  }));
+}
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+<BaseLayout title={`${post.data.title} — Pablo Nistal`} description={post.data.description} lang="en">
+  <article class="min-h-screen pt-24 pb-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <a href="/blog" class="text-sm text-muted-foreground hover:text-white transition-colors mb-8 block">← Back to blog</a>
+      <p class="text-sm text-muted-foreground mb-2">
+        {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </p>
+      <h1 class="text-4xl font-bold text-white mb-4">{post.data.title}</h1>
+      <p class="text-lg mb-8" style="color: var(--color-muted-foreground)">{post.data.description}</p>
+      <div class="flex flex-wrap gap-2 mb-10">
+        {post.data.tags.map((tag: string) => (
+          <span class="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">{tag}</span>
+        ))}
+      </div>
+      <div class="prose prose-invert max-w-none">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
