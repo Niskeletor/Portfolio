@@ -1,0 +1,105 @@
+---
+title: "Del Caos Manual al GitOps: Construyendo una Plataforma de Producción en Casa"
+description: "Cómo evolucioné de una Raspberry Pi con servicios systemd a un cluster Proxmox de 3 nodos con K3s, ArgoCD y GitOps — y lo que aprendí operando sistemas reales bajo restricciones reales."
+pubDate: 2026-04-07
+tags: ["GitOps", "K3s", "Kubernetes", "ArgoCD", "Proxmox", "TrueNAS", "Platform Engineering"]
+metrics:
+  - label: "Tiempo de deploy (Git push → en producción)"
+    value: "<5 min"
+  - label: "Downtime durante actualizaciones"
+    value: "Cero"
+  - label: "kubectl apply manuales"
+    value: "Cero"
+  - label: "Historial de plataforma en Git"
+    value: "100%"
+draft: false
+---
+
+## Contexto
+
+Esto no es un tutorial. Es la historia de cómo una plataforma personal evolucionó durante varios años — desde una Raspberry Pi en un escritorio hasta un cluster Proxmox de 3 nodos con Kubernetes, GitOps y observabilidad de nivel producción.
+
+La restricción que lo hizo real: tiempo personal, presupuesto cero, y el objetivo de operar sistemas que funcionen de verdad. No un lab que enciendes una vez y olvidas — una plataforma de la que dependes.
+
+## Antes: La Era Manual
+
+Empezó con una Raspberry Pi y curiosidad por la computación de bajo consumo. Luego un PC de oficina — un i3 con 8GB de RAM corriendo Debian — se convirtió en el primer "servidor". Nextcloud, servicios systemd, y el descubrimiento clásico: cada `apt upgrade` era un incidente potencial.
+
+Cuando las cosas se rompían, reinstalar desde cero era la salida fácil. En su lugar, aprendí a leer logs de `journalctl`, profundizar en los logs de servicio y cruzar con changelogs. Cada servicio roto era un puzzle. Ese cambio de mentalidad — de "consumidor de servicios" a "ingeniero que entiende el sistema" — es donde realmente empieza esta historia.
+
+**Docker lo cambió todo.** No a través de la CLI al principio, sino a través de Portainer — una interfaz visual que hizo tangibles los contenedores, stacks, redes y volúmenes. La clave: actualizar el SO ya no implicaba romper los servicios. Esa fue la primera "explosión nuclear" en mi modelo mental.
+
+El workflow en ese momento:
+- Navegar por Docker Hub o LinuxServer.io buscando imágenes
+- Pegar una plantilla compose en Portainer
+- Editar ficheros manualmente en la UI de Portainer para actualizar
+- Directorios en `~/services/<servicio>/` como única "fuente de verdad"
+
+**El problema con ese enfoque:** sin control de versiones, sin historial, sin forma de recuperar una configuración rota salvo la memoria. Si un directorio desaparecía, la configuración del servicio se perdía. Watchtower ayudó a automatizar las actualizaciones de contenedores, pero no resolvía el problema de raíz: el estado del sistema vivía en una máquina, no en un repositorio.
+
+## La Restricción Que Impulsó el Cambio
+
+Dos problemas que el enfoque de Docker en un solo servidor no podía resolver:
+
+1. **Sin HA.** Si quería actualizar hardware, todos los servicios se caían. No había forma de migrar cargas sin downtime.
+2. **Sin agilidad.** Probar un cambio de configuración implicaba editar ficheros en producción. El rollback significaba recordar qué habías cambiado.
+
+Necesitaba algo que pudiera correr servicios en múltiples nodos y reemplazar contenedores sin interrupciones. Eso me llevó a Kubernetes — específicamente al modelo de rolling deployment sin downtime: un nuevo contenedor no arranca hasta que la nueva versión se confirma como sana, y el antiguo no se elimina hasta que el nuevo está corriendo.
+
+## La Solución: K3s + ArgoCD + GitOps
+
+El camino hacia la arquitectura actual no fue lineal. Reconstruí el cluster múltiples veces. Cada iteración enseñó algo que la anterior no:
+
+- **Primeros intentos con Rancher** como capa de gestión — bueno para entender conceptos de Kubernetes visualmente, similar a cómo Portainer ayudó con Docker
+- **Helm y charts de Bitnami** facilitaron los primeros despliegues, pero personalizar a necesidades reales requirió entender los manifests subyacentes
+- **El almacenamiento fue el problema difícil.** TrueNAS como backend NFS vía el driver CSI funciona bien para configs de apps y cargas sin estado. Para bases de datos, los discos mecánicos por NFS introdujeron latencia que rompía servicios. Ahí entró Longhorn — almacenamiento de bloque distribuido que corre dentro del propio cluster
+
+**El punto de inflexión con GitOps vino del trabajo, no del homelab.**
+
+En un puesto anterior, el equipo gestionaba un cluster AKS ejecutando `kubectl apply` manualmente y haciendo ediciones en vivo a través de OpenLens. Me asignaron la tarea de investigar un workflow compartido mejor. Fue entonces cuando estudié ArgoCD a fondo.
+
+ArgoCD escucha cambios en un repositorio Git y reconcilia automáticamente el estado del cluster para que coincida. Sin apply manual. Sin "¿quién cambió esto y cuándo?". Git se convierte en la fuente única de verdad — con historial completo, visibilidad de diffs, y capacidad de rollback simplemente revirtiendo un commit.
+
+El insight adicional: para miembros del equipo menos cómodos con la terminal, ArgoCD proporcionaba una interfaz visual para ver exactamente qué estaba desplegado, qué sincronizando y cuál era el diff respecto al estado deseado. La infraestructura se volvió legible para todos.
+
+Ese entendimiento volvió directamente a la plataforma personal.
+
+## Arquitectura Actual
+
+```
+GitHub/Gitea (fuente de verdad)
+    ↓ push
+ArgoCD (loop de reconciliación, auto-sync)
+    ↓ aplica manifests
+Cluster K3s (3 nodos Proxmox: Andromeda, Triangulum, Orion)
+    ├── TrueNAS NFS → configs de apps, media, backups (driver CSI)
+    ├── Longhorn → volúmenes persistentes para bases de datos
+    ├── VictoriaMetrics + Grafana → métricas y dashboards
+    └── Traefik → ingress con TLS
+```
+
+**El golden path para un nuevo servicio hoy:**
+1. Crear un manifest en el repo GitOps
+2. Push a main
+3. ArgoCD detecta el cambio y sincroniza en minutos
+4. El servicio está en producción, monitorizado y con control de versiones
+
+Sin SSH a un nodo. Sin `kubectl apply -f`. Sin editor de Portainer. Un cambio de fichero en Git es toda la operación de despliegue.
+
+## Resultados
+
+| Antes | Después |
+|-------|---------|
+| Ediciones manuales en Portainer por servicio | Git push → auto-deploy con ArgoCD |
+| Downtime en cada actualización de contenedor | Rolling deployments sin downtime |
+| Estado de la configuración vivía en disco | 100% del estado de la plataforma en Git |
+| Upgrade de hardware = downtime total | Las cargas se replanifican entre nodos |
+| Sin mecanismo de rollback | `git revert` = rollback instantáneo |
+
+**Lo que esto permite hoy:** puedo provisionar un stack de infraestructura completo — servicios, red, almacenamiento, observabilidad, CI/CD — para una pequeña o mediana empresa en una fracción del tiempo que hubiera costado antes. La plataforma no es una lista de hobbies. Es un sistema repetible y documentado.
+
+## Qué Haría Diferente
+
+- Empezar con GitOps desde el principio, incluso para un solo nodo. La disciplina de "ningún cambio manual al cluster" es más fácil de construir que de añadir a posteriori.
+- Definir SLOs antes. "Está funcionando" no es un objetivo de fiabilidad. Definir qué significa "funcionando" (latencia, disponibilidad, tasa de error) cambia cómo construyes y monitorizas.
+- Documentar incidentes desde el inicio. Cada vez que algo se rompió y lo arreglé fue un postmortem que nunca se escribió. Ese conocimiento institucional vive solo en la memoria.

@@ -1,0 +1,105 @@
+---
+title: "From Manual Chaos to GitOps: Building a Production-like Platform at Home"
+description: "How I evolved from a Raspberry Pi with systemd services to a 3-node Proxmox cluster running K3s, ArgoCD and GitOps — and what I learned operating real systems under real constraints."
+pubDate: 2026-04-07
+tags: ["GitOps", "K3s", "Kubernetes", "ArgoCD", "Proxmox", "TrueNAS", "Platform Engineering"]
+metrics:
+  - label: "Deploy time (Git push → live)"
+    value: "<5 min"
+  - label: "Service downtime during updates"
+    value: "Zero"
+  - label: "Manual kubectl apply runs"
+    value: "Zero"
+  - label: "Platform history in Git"
+    value: "100%"
+draft: false
+---
+
+## Context
+
+This isn't a tutorial. It's the story of how a personal platform evolved over several years — from a Raspberry Pi on a desk to a 3-node Proxmox cluster running Kubernetes, GitOps and production-grade observability.
+
+The constraint that made it real: personal time, zero budget, and the goal of operating systems that actually work. Not a lab you turn on once and forget — a platform you depend on.
+
+## Before: The Manual Era
+
+It started with a Raspberry Pi and curiosity about low-power computing. Then a decommissioned office PC — an i3 with 8GB RAM running Debian — became the first "server". Nextcloud, systemd services, and the classic discovery: every `apt upgrade` was a potential incident.
+
+When things broke, reinstalling from scratch was the easy way out. Instead, I learned to read `journalctl` logs, dig into service logs, and cross-reference changelogs. Each broken service was a puzzle. That mindset shift — from "consumer of services" to "engineer who understands the system" — is where this story really starts.
+
+**Docker changed everything.** Not through the CLI at first, but through Portainer — a visual interface that made containers, stacks, networks and volumes tangible. The key insight: updating the OS no longer meant breaking the services. That was the first "explosion" in my mental model.
+
+The workflow at that point:
+- Browse Docker Hub or LinuxServer.io for images
+- Paste a compose template into Portainer
+- Manually edit files inside the Portainer UI to update
+- Directories in `~/services/<service-name>/` as the only "source of truth"
+
+**The problem with that approach:** no version control, no history, no way to recover a broken configuration except memory. If a directory disappeared, the service configuration was gone. Watchtower helped automate container updates, but it didn't solve the root issue: the state of the system lived in a machine, not in a repository.
+
+## The Constraint That Drove Change
+
+Two problems that the Docker-on-a-single-machine approach couldn't solve:
+
+1. **No HA.** If I wanted to upgrade hardware, all services went down. There was no way to migrate workloads without downtime.
+2. **No agility.** Testing a configuration change meant editing live files. Rollback meant remembering what you changed.
+
+I needed something that could run services across multiple nodes and replace containers without interruption. That led me to Kubernetes — specifically to the zero-downtime rolling deployment model: a new container isn't started until the new version is confirmed healthy, and the old one isn't removed until the new one is running.
+
+## The Solution: K3s + ArgoCD + GitOps
+
+The path to the current architecture wasn't linear. I rebuilt the cluster multiple times. Each iteration taught me something the previous one didn't:
+
+- **First attempts with Rancher** as a management layer — good for understanding Kubernetes concepts visually, similar to how Portainer helped with Docker
+- **Helm and Bitnami charts** made initial deployments easier, but customising them to real needs required understanding the underlying manifests
+- **Storage was the hard problem.** TrueNAS as NFS backend via the CSI driver works well for app configs and stateless workloads. For databases, mechanical disks over NFS introduced latency that broke things. That's when Longhorn became part of the stack — distributed block storage that runs inside the cluster itself
+
+**The GitOps turning point came from work, not from the homelab.**
+
+At a previous role, the team was managing an AKS cluster by running `kubectl apply` manually and making live edits through OpenLens. I was given the task of researching a better shared workflow. That's when I studied ArgoCD properly.
+
+ArgoCD listens for changes in a Git repository and automatically reconciles the cluster state to match. No more manual apply. No more "who changed this and when?". Git becomes the single source of truth — with full history, diff visibility, and the ability to roll back by reverting a commit.
+
+The additional insight: for team members less comfortable with the terminal, ArgoCD provided a visual interface to see exactly what was deployed, what was syncing, and what the diff was against the desired state. Infrastructure became legible to everyone.
+
+That understanding came directly back to the personal platform.
+
+## Current Architecture
+
+```
+GitHub/Gitea (source of truth)
+    ↓ push
+ArgoCD (reconciliation loop, auto-sync)
+    ↓ applies manifests
+K3s cluster (3 Proxmox nodes: Andromeda, Triangulum, Orion)
+    ├── TrueNAS NFS → app configs, media, backups (CSI driver)
+    ├── Longhorn → database persistent volumes
+    ├── VictoriaMetrics + Grafana → metrics and dashboards
+    └── Traefik → ingress with TLS
+```
+
+**The golden path for a new service today:**
+1. Create a manifest in the GitOps repo
+2. Push to main
+3. ArgoCD detects the change and syncs within minutes
+4. Service is live, monitored, and version-controlled
+
+No SSH into a node. No `kubectl apply -f`. No Portainer editor. A file change in Git is the entire deployment operation.
+
+## Results
+
+| Before | After |
+|--------|-------|
+| Manual Portainer edits per service | Git push → ArgoCD auto-deploy |
+| Downtime during every container update | Zero-downtime rolling deployments |
+| Configuration state lived on disk | 100% of platform state in Git |
+| Hardware upgrade = full downtime | Workloads reschedule across nodes |
+| No rollback mechanism | `git revert` = instant rollback |
+
+**What this enables today:** I can provision a complete infrastructure stack — services, networking, storage, observability, CI/CD — for a small or medium business in a fraction of the time it would have taken before. The platform is not a hobby list. It's a repeatable, documented system.
+
+## What I'd Do Differently
+
+- Start with GitOps from day one, even for a single node. The discipline of "no manual changes to the cluster" is easier to build than to retrofit.
+- Define SLOs earlier. "It's working" is not a reliability target. Defining what "working" means (latency, availability, error rate) changes how you build and monitor.
+- Document incidents from the start. Every time something broke and I fixed it was a postmortem that never got written. That institutional knowledge lives only in memory.
