@@ -37,7 +37,7 @@ const placeholder = {
     ) : (
       <div class="grid md:grid-cols-2 gap-8">
         {allStudies.map(study => (
-          <a href={`/case-studies/${study.id.split('/').slice(1).join('/')}`}
+          <a href={`${lang === 'es' ? '/es' : ''}/case-studies/${study.id.split('/').slice(1).join('/')}`}
             class="card p-6 hover:border-primary/50 transition-all hover:scale-[1.01] group">
             <h3 class="text-xl font-semibold text-white mb-2 group-hover:text-primary transition-colors">
               {study.data.title}

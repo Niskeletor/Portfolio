@@ -1,8 +1,8 @@
 ---
 import { useTranslations, getLocalizedPath, type Lang } from '../i18n/utils';
 
-interface Props { lang: Lang; }
-const { lang } = Astro.props;
+interface Props { lang: Lang; altPath?: string; }
+const { lang, altPath: altPathProp } = Astro.props;
 const t = useTranslations(lang);
 
 const navLinks = [
@@ -15,8 +15,7 @@ const navLinks = [
   { key: 'nav.contact', href: '#contact' },
 ] as const;
 
-const altLang = lang === 'en' ? 'es' : 'en';
-const altPath = lang === 'en' ? '/es/' : '/';
+const altPath = altPathProp ?? (lang === 'en' ? '/es/' : '/');
 ---
 <nav class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
   <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">

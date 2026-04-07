@@ -1,0 +1,373 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Pablo Nistal" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e5]:
+        - link "About" [ref=e6] [cursor=pointer]:
+          - /url: "#about"
+        - link "Stack" [ref=e7] [cursor=pointer]:
+          - /url: "#stack"
+        - link "Experience" [ref=e8] [cursor=pointer]:
+          - /url: "#experience"
+        - link "Platform" [ref=e9] [cursor=pointer]:
+          - /url: "#platform"
+        - link "Projects" [ref=e10] [cursor=pointer]:
+          - /url: "#projects"
+        - link "Blog" [ref=e11] [cursor=pointer]:
+          - /url: /blog
+        - link "Contact" [ref=e12] [cursor=pointer]:
+          - /url: "#contact"
+        - link "ES" [ref=e13] [cursor=pointer]:
+          - /url: /es/
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - generic [ref=e20]:
+        - img "Pablo Alejandro Nistal" [ref=e25]
+        - generic [ref=e27]:
+          - paragraph [ref=e28]: Hi, I'm
+          - heading "Pablo Alejandro Nistal" [level=1] [ref=e29]
+          - heading "DevOps / SRE / Platform Engineer" [level=2] [ref=e30]
+          - paragraph [ref=e31]: Linux (RHEL) · Kubernetes/K3s · GitLab CI/CD · Ansible · AWS · Cloudflare · Observability · GitOps · SLOs
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - generic [ref=e34]: 6+
+              - generic [ref=e35]: Years experience
+            - generic [ref=e36]:
+              - generic [ref=e37]: 50+
+              - generic [ref=e38]: Services managed
+            - generic [ref=e39]:
+              - generic [ref=e40]: "3"
+              - generic [ref=e41]: Proxmox nodes
+            - generic [ref=e42]:
+              - generic [ref=e43]: 🌍
+              - generic [ref=e44]: Remote EMEA
+          - generic [ref=e45]:
+            - link "View Projects" [ref=e46] [cursor=pointer]:
+              - /url: "#projects"
+            - link "Get in Touch" [ref=e47] [cursor=pointer]:
+              - /url: "#contact"
+            - link "GitHub" [ref=e48] [cursor=pointer]:
+              - /url: https://github.com/niskeletor
+            - link "LinkedIn" [ref=e49] [cursor=pointer]:
+              - /url: https://linkedin.com/in/pnistalrio
+      - img [ref=e51]
+    - generic [ref=e54]:
+      - heading "About me" [level=2] [ref=e55]
+      - generic [ref=e56]:
+        - paragraph [ref=e57]: I'm a DevOps Architect and SRE based in A Coruña, Spain, with 6+ years operating, automating and improving Linux infrastructure. I currently work at Allenta Consulting on high-availability systems, observability pipelines and automation with Ansible.
+        - paragraph [ref=e58]: I apply SRE principles — SLOs, error budgets, blameless postmortems, toil reduction — both at work and in my personal platform (a production-like 3-node cluster I run at home). I believe the best way to grow is to operate real systems under real constraints.
+        - paragraph [ref=e59]: I'm open to remote EMEA roles where reliability engineering and platform thinking matter.
+    - generic [ref=e61]:
+      - heading "Tech Stack" [level=2] [ref=e62]
+      - paragraph [ref=e63]: Tools I use in real context — no arbitrary percentage bars.
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - generic [ref=e67]: 🖥️
+            - heading "Infrastructure" [level=3] [ref=e68]
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - paragraph [ref=e71]: Proxmox VE
+              - paragraph [ref=e72]: Homelab platform, 3 nodes, 208GB RAM
+            - generic [ref=e73]:
+              - paragraph [ref=e74]: K3s / Kubernetes
+              - paragraph [ref=e75]: Production cluster, GitOps with ArgoCD
+            - generic [ref=e76]:
+              - paragraph [ref=e77]: Docker
+              - paragraph [ref=e78]: Daily work + homelab (50+ services)
+            - generic [ref=e79]:
+              - paragraph [ref=e80]: Linux / RHEL
+              - paragraph [ref=e81]: Primary OS — work and personal
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - generic [ref=e84]: 📊
+            - heading "Observability" [level=3] [ref=e85]
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - paragraph [ref=e88]: VictoriaMetrics
+              - paragraph [ref=e89]: Homelab metrics + work (Allenta)
+            - generic [ref=e90]:
+              - paragraph [ref=e91]: Zabbix
+              - paragraph [ref=e92]: Work monitoring (Allenta)
+            - generic [ref=e93]:
+              - paragraph [ref=e94]: Grafana
+              - paragraph [ref=e95]: Dashboards + alerting
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]: ⚙️
+            - heading "Automation & IaC" [level=3] [ref=e99]
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - paragraph [ref=e102]: Ansible
+              - paragraph [ref=e103]: Primary IaC — work + homelab
+            - generic [ref=e104]:
+              - paragraph [ref=e105]: Bash / Python
+              - paragraph [ref=e106]: Scripting, automation, APIs
+            - generic [ref=e107]:
+              - paragraph [ref=e108]: GitOps / ArgoCD
+              - paragraph [ref=e109]: Declarative K3s cluster management
+        - generic [ref=e110]:
+          - generic [ref=e111]:
+            - generic [ref=e112]: 🔄
+            - heading "CI/CD" [level=3] [ref=e113]
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - paragraph [ref=e116]: GitLab CI/CD
+              - paragraph [ref=e117]: Primary CI/CD at work
+            - generic [ref=e118]:
+              - paragraph [ref=e119]: GitHub Actions
+              - paragraph [ref=e120]: Personal projects + this portfolio
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - generic [ref=e123]: ☁️
+            - heading "Cloud & Network" [level=3] [ref=e124]
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - paragraph [ref=e127]: AWS
+              - paragraph [ref=e128]: EC2, S3, IAM — work (Allenta)
+            - generic [ref=e129]:
+              - paragraph [ref=e130]: Cloudflare
+              - paragraph [ref=e131]: DNS, Tunnel, Pages, Workers
+            - generic [ref=e132]:
+              - paragraph [ref=e133]: Azure
+              - paragraph [ref=e134]: AZ-900 certified, fundamentals
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - generic [ref=e137]: 🔒
+            - heading "Security" [level=3] [ref=e138]
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - paragraph [ref=e141]: Vaultwarden
+              - paragraph [ref=e142]: Secrets management — homelab
+            - generic [ref=e143]:
+              - paragraph [ref=e144]: Network segmentation
+              - paragraph [ref=e145]: VLANs, Pi-hole, WireGuard
+    - generic [ref=e147]:
+      - heading "Work Experience" [level=2] [ref=e148]
+      - generic [ref=e149]:
+        - generic [ref=e151]:
+          - img [ref=e153]
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - generic [ref=e158]: Jan 2026 — Present
+              - generic [ref=e159]: · A Coruña, Spain (Hybrid)
+            - heading "DevOps Architect | Sysadmin" [level=3] [ref=e160]
+            - paragraph [ref=e161]: Allenta Consulting
+            - list [ref=e162]:
+              - listitem [ref=e163]:
+                - generic [ref=e164]: ›
+                - generic [ref=e165]: Operating and monitoring critical Linux infrastructure with VictoriaMetrics and Zabbix
+              - listitem [ref=e166]:
+                - generic [ref=e167]: ›
+                - generic [ref=e168]: Automation with Ansible — configuration management, deployments and maintenance
+              - listitem [ref=e169]:
+                - generic [ref=e170]: ›
+                - generic [ref=e171]: Docker service management with GitLab CI/CD pipelines
+              - listitem [ref=e172]:
+                - generic [ref=e173]: ›
+                - generic [ref=e174]: Perimeter security with Cloudflare, RHEL system administration
+            - generic [ref=e175]:
+              - generic [ref=e176]: RHEL
+              - generic [ref=e177]: Ansible
+              - generic [ref=e178]: Docker
+              - generic [ref=e179]: GitLab CI/CD
+              - generic [ref=e180]: VictoriaMetrics
+              - generic [ref=e181]: Zabbix
+              - generic [ref=e182]: Cloudflare
+              - generic [ref=e183]: AWS
+        - generic [ref=e184]:
+          - img [ref=e186]
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - generic [ref=e191]: Nov 2024 — Jan 2026
+              - generic [ref=e192]: · Santiago de Compostela, Spain
+            - heading "DevOps SRE" [level=3] [ref=e193]
+            - paragraph [ref=e194]: Ozona Tech
+            - list [ref=e195]:
+              - listitem [ref=e196]:
+                - generic [ref=e197]: ›
+                - generic [ref=e198]: Site reliability engineering and platform operations
+              - listitem [ref=e199]:
+                - generic [ref=e200]: ›
+                - generic [ref=e201]: CI/CD pipeline improvement and observability
+            - generic [ref=e202]:
+              - generic [ref=e203]: Linux
+              - generic [ref=e204]: Docker
+              - generic [ref=e205]: Kubernetes
+              - generic [ref=e206]: CI/CD
+        - generic [ref=e207]:
+          - img [ref=e209]
+          - generic [ref=e212]:
+            - generic [ref=e213]:
+              - generic [ref=e214]: Apr 2024 — Nov 2024
+              - generic [ref=e215]: · A Coruña, Spain
+            - heading "DevOps Engineer" [level=3] [ref=e216]
+            - paragraph [ref=e217]: Altia
+            - list [ref=e218]:
+              - listitem [ref=e219]:
+                - generic [ref=e220]: ›
+                - generic [ref=e221]: DevOps engineering on client projects
+              - listitem [ref=e222]:
+                - generic [ref=e223]: ›
+                - generic [ref=e224]: Infrastructure automation and integration
+            - generic [ref=e225]:
+              - generic [ref=e226]: Linux
+              - generic [ref=e227]: Docker
+              - generic [ref=e228]: CI/CD
+              - generic [ref=e229]: Ansible
+        - generic [ref=e230]:
+          - img [ref=e232]
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - generic [ref=e237]: Nov 2021 — Apr 2024
+              - generic [ref=e238]: · A Coruña, Spain
+            - heading "Sysadmin | Software Developer" [level=3] [ref=e239]
+            - paragraph [ref=e240]: TABIGAL SL
+            - list [ref=e241]:
+              - listitem [ref=e242]:
+                - generic [ref=e243]: ›
+                - generic [ref=e244]: Linux systems administration and internal tooling development
+              - listitem [ref=e245]:
+                - generic [ref=e246]: ›
+                - generic [ref=e247]: Process automation and infrastructure maintenance
+            - generic [ref=e248]:
+              - generic [ref=e249]: Linux
+              - generic [ref=e250]: Python
+              - generic [ref=e251]: Bash
+              - generic [ref=e252]: Networking
+        - generic [ref=e253]:
+          - img [ref=e255]
+          - generic [ref=e258]:
+            - generic [ref=e259]:
+              - generic [ref=e260]: Feb 2020 — Nov 2021
+              - generic [ref=e261]: · A Coruña, Spain
+            - heading "Systems Administrator" [level=3] [ref=e262]
+            - paragraph [ref=e263]: INCOGA NORTE
+            - list [ref=e264]:
+              - listitem [ref=e265]:
+                - generic [ref=e266]: ›
+                - generic [ref=e267]: Corporate IT systems administration
+              - listitem [ref=e268]:
+                - generic [ref=e269]: ›
+                - generic [ref=e270]: Technical support and infrastructure maintenance
+            - generic [ref=e271]:
+              - generic [ref=e272]: Windows Server
+              - generic [ref=e273]: Linux
+              - generic [ref=e274]: Networking
+    - generic [ref=e276]:
+      - heading "Personal Platform" [level=2] [ref=e277]
+      - paragraph [ref=e278]: A production-like 3-node cluster I operate, monitor and improve — not a hobby list, a working system.
+      - link "View GitOps repository →" [ref=e279] [cursor=pointer]:
+        - /url: https://github.com/niskeletor
+        - img [ref=e280]
+        - text: View GitOps repository →
+      - generic [ref=e282]:
+        - generic [ref=e283]:
+          - generic [ref=e284]: "3"
+          - generic [ref=e285]: Proxmox nodes
+        - generic [ref=e286]:
+          - generic [ref=e287]: 208GB
+          - generic [ref=e288]: Total RAM
+        - generic [ref=e289]:
+          - generic [ref=e290]: ~65TB
+          - generic [ref=e291]: Storage
+        - generic [ref=e292]:
+          - generic [ref=e293]: 50+
+          - generic [ref=e294]: Services
+      - generic [ref=e295]:
+        - generic [ref=e296]:
+          - generic [ref=e297]:
+            - generic [ref=e298]: 🏗️
+            - heading "Architecture" [level=3] [ref=e299]
+          - paragraph [ref=e300]: "3 Proxmox nodes (Andromeda, Triangulum, Orion), K3s cluster with ArgoCD GitOps, TrueNAS storage, Pi-hole DNS. Every service follows a golden path: repo template → CI/CD pipeline → GitOps deploy → SLO dashboard → alerting."
+        - generic [ref=e301]:
+          - generic [ref=e302]:
+            - generic [ref=e303]: 📈
+            - heading "Delivery Metrics" [level=3] [ref=e304]
+          - paragraph [ref=e305]: "Real DORA-style metrics tracked via GitOps commit history: multiple deployments per week, commit-to-deploy lead time under 5 minutes via ArgoCD reconciliation, change fail rate tracked per incident log."
+        - generic [ref=e306]:
+          - generic [ref=e307]:
+            - generic [ref=e308]: 🔍
+            - heading "Observability" [level=3] [ref=e309]
+          - paragraph [ref=e310]: VictoriaMetrics + Grafana for metrics and dashboards. Zabbix for host-level monitoring. Alert routing configured for actionable notifications — not noise. Dashboards cover resource saturation, service health and storage capacity.
+        - generic [ref=e311]:
+          - generic [ref=e312]:
+            - generic [ref=e313]: ⚡
+            - heading "Toil Reduction" [level=3] [ref=e314]
+          - paragraph [ref=e315]: Ansible playbooks handle system updates, service configuration and new node provisioning. Manual operations that were weekly routines are now automated runs. GitOps reconciliation eliminates manual kubectl apply.
+        - generic [ref=e316]:
+          - generic [ref=e317]:
+            - generic [ref=e318]: 🛡️
+            - heading "Security & Reliability" [level=3] [ref=e319]
+          - paragraph [ref=e320]: Network segmentation, secrets managed with Vaultwarden, Tailscale for remote access, Cloudflare tunnels for public services. TLS everywhere. Regular backup verification.
+    - generic [ref=e322]:
+      - heading "Case Studies" [level=2] [ref=e323]
+      - paragraph [ref=e324]: Real infrastructure decisions — context, constraints, solutions and measured outcomes.
+      - generic [ref=e325]:
+        - paragraph [ref=e326]: 🔧
+        - heading "Case studies coming soon" [level=3] [ref=e327]
+        - paragraph [ref=e328]: I'm documenting real work and infrastructure decisions. Check back soon.
+    - generic [ref=e330]:
+      - heading "Certifications" [level=2] [ref=e331]
+      - generic [ref=e332]:
+        - generic [ref=e333]:
+          - generic [ref=e334]: ☁️
+          - 'heading "Microsoft Certified: Azure Fundamentals" [level=3] [ref=e335]'
+          - paragraph [ref=e336]: AZ-900
+          - paragraph [ref=e337]: Microsoft
+          - paragraph [ref=e338]: March 2024
+        - generic [ref=e339]:
+          - generic [ref=e340]: 🐧
+          - heading "Linux Essentials" [level=3] [ref=e341]
+          - paragraph [ref=e342]: LPI 010-160
+          - paragraph [ref=e343]: Cisco / LPI
+          - paragraph [ref=e344]: May 2023
+        - generic [ref=e345]:
+          - generic [ref=e346]: 🐍
+          - heading "PCEP — Certified Entry-Level Python Programmer" [level=3] [ref=e347]
+          - paragraph [ref=e348]: PCEP-30-02
+          - paragraph [ref=e349]: OpenEDG Python Institute
+          - paragraph [ref=e350]: December 2023
+        - generic [ref=e351]:
+          - generic [ref=e352]: 🎓
+          - generic [ref=e353]: In progress
+          - heading "Computer Science" [level=3] [ref=e354]
+          - paragraph [ref=e355]: In progress (2024–2027)
+          - paragraph [ref=e356]: Universitat Oberta de Catalunya (UOC)
+    - generic [ref=e358]:
+      - generic [ref=e359]:
+        - heading "Blog & Notes" [level=2] [ref=e360]
+        - link "View all posts →" [ref=e361] [cursor=pointer]:
+          - /url: /blog
+      - generic [ref=e362]:
+        - paragraph [ref=e363]: ✍️
+        - heading "Posts coming soon" [level=3] [ref=e364]
+        - paragraph [ref=e365]: Writing about real SRE problems, platform engineering and GitOps.
+    - generic [ref=e367]:
+      - heading "Get in Touch" [level=2] [ref=e368]
+      - paragraph [ref=e369]: Open to remote EMEA opportunities
+      - paragraph [ref=e370]: "Timezone: CET/CEST (UTC+1/+2)"
+      - generic [ref=e371]:
+        - link "✉️ Send email" [ref=e372] [cursor=pointer]:
+          - /url: mailto:nistalin@gmail.com
+        - link "LinkedIn" [ref=e373] [cursor=pointer]:
+          - /url: https://linkedin.com/in/pnistalrio
+        - link "GitHub" [ref=e374] [cursor=pointer]:
+          - /url: https://github.com/niskeletor
+      - paragraph [ref=e375]: Based in A Coruña, Galicia, Spain 🇪🇸
+  - contentinfo [ref=e376]:
+    - generic [ref=e377]:
+      - paragraph [ref=e378]: © 2026 Pablo Alejandro Nistal
+      - paragraph [ref=e379]:
+        - text: Built with
+        - link "Astro" [ref=e380] [cursor=pointer]:
+          - /url: https://astro.build
+        - text: · Deployed on
+        - link "Cloudflare Pages" [ref=e381] [cursor=pointer]:
+          - /url: https://pages.cloudflare.com
+      - generic [ref=e382]:
+        - link "GitHub" [ref=e383] [cursor=pointer]:
+          - /url: https://github.com/niskeletor
+        - link "LinkedIn" [ref=e384] [cursor=pointer]:
+          - /url: https://linkedin.com/in/pnistalrio

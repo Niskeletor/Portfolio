@@ -8,12 +8,14 @@ interface Props {
   title?: string;
   description?: string;
   lang?: 'en' | 'es';
+  altPath?: string;
 }
 
 const {
   title = 'Pablo Alejandro Nistal — DevOps / SRE / Platform Engineer',
   description = 'DevOps Architect and SRE based in A Coruña, Spain. Kubernetes, Ansible, GitOps, Observability, Linux.',
   lang = getLangFromUrl(Astro.url),
+  altPath,
 } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -29,7 +31,7 @@ const {
     <title>{title}</title>
   </head>
   <body class="bg-background text-white">
-    <Navigation lang={lang} />
+    <Navigation lang={lang} altPath={altPath} />
     <main>
       <slot />
     </main>
