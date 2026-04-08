@@ -1,0 +1,149 @@
+---
+title: "Landsraad: Construyendo una Plataforma Personal como un Imperio"
+description: "Cómo diseñé un homelab multi-nodo con principios de Platform Engineering — cada servidor una constelación, cada VM un mundo, todo gobernado por GitOps y observabilidad. Una historia de infraestructura inspirada en Dune."
+pubDate: 2026-04-08
+tags: ["Platform Engineering", "Homelab", "Proxmox", "K3s", "GitOps", "Observabilidad", "Infraestructura AI"]
+draft: false
+---
+
+En *Dune* de Frank Herbert, el Landsraad es el consejo de las casas nobles — cada una con su territorio, sus recursos y sus responsabilidades, todas vinculadas por una ley común. Ninguna casa controla todo. El poder está distribuido, federado, gobernado por protocolo.
+
+Ese es el modelo mental detrás de mi plataforma personal.
+
+No empecé con la intención de construir un homelab temático. Empecé para resolver problemas reales — fiabilidad, automatización, independencia de hardware — y el sistema de nombres emergió de forma natural a medida que la infraestructura creció. El universo Dune resultó ser la metáfora perfecta para lo que estaba construyendo: una federación de nodos, cada uno con un rol definido, todos operando bajo un conjunto común de reglas.
+
+Esta es la historia de cómo funciona Landsraad.
+
+---
+
+## Las Casas del Landsraad
+
+Cada nodo del cluster tiene un nombre de la astronomía o del universo Dune. Pero los nombres no son arbitrarios — cada uno refleja el rol y el carácter del nodo.
+
+### Casa Atreides — La Fundación (`atreides`, Raspberry Pi 4)
+
+Casa Atreides en *Dune* es la casa noble conocida por su honor, lealtad e importancia estratégica. En Landsraad, **Atreides** es la Raspberry Pi 4 — el nodo más crítico de toda la infraestructura.
+
+Ejecuta los servicios de los que todo lo demás depende:
+- **Pi-hole** — DNS y DHCP para toda la red. Si Atreides cae, nada resuelve.
+- **Vaultwarden** — el vault de contraseñas. Cada credencial del imperio vive aquí.
+- **WireGuard** — el gateway VPN. Acceso remoto a toda la plataforma.
+- **Home Assistant** — la capa de automatización del hogar.
+- **Cloudflare DDNS** — la conexión de la plataforma con el exterior.
+
+Una Raspberry Pi 4 ejecutando infraestructura crítica suena frágil. No lo es — es la máquina más fiable del cluster. Consume ~7W, tiene 7.6GB de RAM (84% disponible) y lleva meses corriendo de forma continua. La restricción del bajo consumo obliga a la simplicidad, y la simplicidad es fiabilidad.
+
+### El Cluster de Constelaciones — Los Nodos de Cómputo
+
+Los tres nodos Proxmox llevan nombres de galaxias y constelaciones. Apropiado: son el universo físico donde todo corre.
+
+**Andromeda** es el punto de entrada — un Intel i5-7500 con 15GB de RAM. Aloja el nodo master de K3s y las VMs principales. La RAM está al 80% de utilización: trabaja duro, pero con margen.
+
+**Triangulum** es el especialista en almacenamiento — un AMD Ryzen 5 5560U con 12GB de RAM y ~17TB de almacenamiento bruto. Aloja DUNE, la VM de medios. La Galaxia del Triángulo es pequeña pero densa — mismo perfil que este nodo.
+
+**Orion** es el titán — un Intel Xeon E5-2630L con 62GB de RAM y ~48TB de almacenamiento entre SSDs y HDDs. Ejecuta TrueNAS (la columna vertebral de almacenamiento del imperio) y tiene capacidad significativa para expansión. Orión el cazador: poderoso, paciente, esperando.
+
+**Perseus** es la incorporación más reciente — un Intel Xeon E5-2678v3 con 251GB de RAM. Su propósito es singular y específico: ejecutar **Omnius**, el nodo de IA. Más sobre esto en breve.
+
+### Los Mundos (VMs)
+
+Cada VM es un planeta — un mundo contenido con su propio propósito y entorno.
+
+**DUNE** es el planeta de los medios. Nombrado en honor al mundo desértico de Arrakis, ejecuta todo el stack multimedia: Jellyfin, Immich, Nextcloud, Nginx Proxy Manager, Tailscale. Todo fluye a través de DUNE. La especia — en este caso, los medios — debe fluir.
+
+**Betelgeuse** es TrueNAS Scale — la estrella de almacenamiento. Nombrada en honor a una de las estrellas más grandes conocidas, proporciona ~60TB de almacenamiento a toda la plataforma mediante shares NFS y SMB. Todos los datos persistentes del cluster K3s aterrizan aquí.
+
+**Omnius** es la máquina pensante de IA. En *Las Leyendas de Dune* (las precuelas de Brian Herbert), Omnius es la red de inteligencias máquina interconectadas. En Landsraad, es una VM con GPU passthrough que ejecuta un stack completo de inferencia IA.
+
+**Harkonnen** es el motor de automatización. Casa Harkonnen en *Dune* es implacable e industrial — siempre extrayendo el máximo rendimiento. Este servidor Debian ejecuta 29 contenedores Docker: el stack *arr (Sonarr, Radarr, Prowlarr), N8N, Wiki.js, Vikunja, Linkwarden. Si Atreides es la fundación y DUNE es la capa de experiencia, Harkonnen es la sala de máquinas.
+
+---
+
+## La Arquitectura de la Plataforma
+
+Tres principios arquitectónicos gobiernan cómo opera Landsraad:
+
+### 1. Separación de responsabilidades por nodo
+
+Cada nodo tiene una especialidad definida. Esto no es solo nomenclatura — es diseño operacional:
+
+```
+Atreides  → Servicios críticos de red (DNS, VPN, secretos)
+Andromeda → Cómputo y plano de control de Kubernetes
+Triangulum → Almacenamiento y streaming de medios
+Orion     → Almacenamiento masivo (TrueNAS) y reserva de cómputo
+Perseus   → Inferencia IA (cargas GPU, aisladas)
+Harkonnen → Automatización y servicios de productividad
+DUNE      → Servicios de medios y reverse proxy
+```
+
+Cuando un servicio falla, el radio de explosión está contenido. Cuando un nodo necesita mantenimiento, los demás siguen operando. Este es el principio de los sistemas distribuidos aplicado en casa.
+
+### 2. GitOps como ley del territorio
+
+El cluster K3s se gestiona íntegramente a través de ArgoCD. Sin `kubectl apply` manuales. Sin SSH para parchear un servicio en ejecución. El repositorio Git es la fuente de verdad — cada definición de servicio, cada configuración de recursos, cada referencia a secretos vive ahí.
+
+El modelo operacional:
+1. Escribir o modificar un manifest en el repo GitOps
+2. Push a main
+3. ArgoCD detecta el cambio y reconcilia el estado del cluster
+4. El servicio se despliega, actualiza o elimina — automáticamente
+
+Esto significa que el estado del cluster es siempre auditable, siempre reversible y siempre documentado. `git log` es el historial de despliegues. `git revert` es el mecanismo de rollback.
+
+### 3. Observabilidad como una preocupación de primer nivel
+
+VictoriaMetrics recopila métricas de cada nodo y servicio. Grafana proporciona dashboards de saturación de recursos, salud de servicios y capacidad de almacenamiento. Zabbix gestiona la monitorización a nivel de host y las alertas.
+
+El objetivo no es tener dashboards — es tener **señales accionables**. Una alerta que se dispara sin una acción clara es ruido. Cada alerta en Landsraad tiene un runbook correspondiente: qué significa, qué verificar, qué hacer.
+
+---
+
+## Omnius — La Capa de IA
+
+El nodo más nuevo y experimental del imperio.
+
+Perseus ejecuta una única VM: **Omnius**. El hardware es un Xeon E5-2678v3 con 251GB de RAM y una **RTX 5060 Ti con 16GB de VRAM** pasada mediante VFIO. Esto es inferencia IA local — sin llamadas a APIs externas, sin facturas cloud, sin datos saliendo de la red.
+
+El stack:
+
+**Ollama** sirve 16 modelos LLM localmente — desde modelos de propósito general como Qwen3 14B y Gemma3 27B hasta modelos de razonamiento como Phi4 y DeepSeek-R1. Dos modelos personalizados (`parody-phi4` y `parody-deepseek`) están ajustados para un proyecto separado.
+
+**Open WebUI** proporciona una interfaz estilo ChatGPT para interactuar con cualquiera de los modelos locales.
+
+**ComfyUI** gestiona la generación de imágenes — FLUX.1-dev FP8 con un LoRA personalizado para estilos artísticos.
+
+**Kokoro TTS** proporciona text-to-speech con más de 30 voces multilingüe mediante API.
+
+La decisión de ejecutar inferencia IA localmente fue sobre control y privacidad, no optimización de costes. Cada conversación, cada imagen generada, cada voz sintetizada permanece dentro del perímetro de la red.
+
+---
+
+## Lo Que Esta Plataforma Permite
+
+La respuesta honesta a "¿por qué construir esto?" no es "porque puedo". Es porque operar una plataforma a esta escala — incluso en casa, incluso sin SLAs — enseña cosas que los labs y los cursos no enseñan:
+
+**Aprendes a operar, no solo a desplegar.** Cuando Betelgeuse se llena, no estás haciendo un ejercicio de tutorial — estás haciendo capacity planning bajo presión. Cuando Pi-hole tiene un problema de DNS a las 11pm, no estás leyendo sobre incident response — lo estás haciendo.
+
+**Aprendes que la complejidad tiene un coste.** 50+ servicios en múltiples nodos significa 50+ servicios que pueden fallar, necesitar actualizaciones, tener dependencias. La respuesta no es menos servicios — es mejor automatización, mejor observabilidad, mejores runbooks.
+
+**Aprendes que el pensamiento de plataforma es diferente al pensamiento de sysadmin.** Un sysadmin arregla lo que está roto. Un platform engineer pregunta: ¿por qué se rompió esto, cómo lo prevenimos, y cómo hacemos la vida más fácil a la próxima persona cuando vuelva a romperse?
+
+Landsraad no es una colección de servicios que desplegué y olvidé. Es un sistema vivo que opero, monitorizo y mejoro — bajo restricciones reales, con consecuencias reales cuando las cosas van mal.
+
+---
+
+## Lo Que Viene
+
+El imperio, como siempre, está en expansión:
+
+- **Integración de Perseus**: migrar Omnius de su red temporal aislada a la red principal del cluster e integrar Perseus en el cluster Proxmox
+- **Expansión K3s**: activar los nodos worker parados para dar más capacidad al cluster
+- **Implementación de SLOs**: definir SLIs formales y error budgets para servicios críticos — tratar la plataforma como un producto, no como un proyecto paralelo
+- **Alivio de Harkonnen**: el disco está al 91% de capacidad. Es un problema conocido. La solución es migrar servicios pesados al abundante almacenamiento de Orion. El retraso es intencional: quiero hacerlo bien con una migración de volúmenes adecuada, no solo `rsync` y cruzar los dedos.
+
+La especia debe fluir. Y en Landsraad, la especia es el uptime.
+
+---
+
+*Todos los nombres de nodos, hostnames y direcciones de red en este artículo corresponden a una red doméstica — no a sistemas en producción. Las IPs internas, configuraciones sensibles y credenciales de servicios no se publican.*

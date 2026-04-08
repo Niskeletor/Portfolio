@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog') || []).filter(
+  e => e.id.startsWith('es/') && !e.data.draft
+);
+const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<BaseLayout title="Blog — Pablo Nistal" description="SRE en la práctica, platform engineering, GitOps e historias reales de operaciones." lang="es" altPath="/blog">
+  <div class="min-h-screen pt-24 pb-16 px-6">
+    <div class="max-w-3xl mx-auto">
+      <a href="/es/" class="text-sm text-muted-foreground hover:text-white transition-colors mb-8 block">← Volver al inicio</a>
+      <h1 class="text-4xl font-bold mb-4">Blog <span class="gradient-text">& Notas</span></h1>
+      <p class="text-muted-foreground mb-12">
+        SRE en la práctica, platform engineering, GitOps e historias honestas de operaciones.
+      </p>
+      {sorted.length === 0 ? (
+        <div class="card p-12 text-center">
+          <p class="text-4xl mb-4">✍️</p>
+          <p class="text-xl text-white mb-2">Posts próximamente</p>
+          <p class="text-muted-foreground">En proceso de escritura — vuelve pronto.</p>
+        </div>
+      ) : (
+        <div class="space-y-6">
+          {sorted.map(post => (
+            <a href={`/es/blog/${post.id.replace(/^es\//, '')}`}
+              class="card p-6 block hover:border-primary/50 transition-all group">
+              <p class="text-xs text-muted-foreground mb-2">
+                {post.data.pubDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+              <h2 class="text-xl font-semibold text-white mb-2 group-hover:text-primary transition-colors">
+                {post.data.title}
+              </h2>
+              <p class="text-muted-foreground">{post.data.description}</p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                {post.data.tags.map((tag: string) => (
+                  <span class="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">{tag}</span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
